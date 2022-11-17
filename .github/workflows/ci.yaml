@@ -48,3 +48,17 @@ jobs:
 
     - name: Run terraform fmt
       run: terraform fmt -check=true -write=false
+  docs:
+    name: Validate docs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Render terraform docs inside the README.md and fail if changes are presented
+      uses: terraform-docs/gh-actions@v1.0.0
+      with:
+        working-dir: .
+        config-file: .terraform-docs.yml
+        fail-on-diff: "true"
